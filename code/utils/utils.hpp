@@ -1,0 +1,64 @@
+#ifndef UTILS_HPP
+#define UTILS_HPP
+
+
+#include <png.h>
+#include <vector>
+#include <cstdlib>
+#include <ctime>
+#include <iostream>
+#include <fstream>
+
+void write_png(const char* filename, int width, int height, const std::vector<unsigned char>& data) {
+    char file_name[200];
+    sprintf(file_name, "../result/");
+    sprintf(file_name, "../result/%s", filename);
+    FILE* fp = fopen(file_name, "wb");
+    if (!fp) {
+        std::cerr << "Erreur ouverture fichier PNG.\n";
+        return;
+    }
+
+    png_structp png = png_create_write_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
+    png_infop info = png_create_info_struct(png);
+
+    if (!png || !info) {
+        std::cerr << "Erreur initialisation libpng.\n";
+        fclose(fp);
+        return;
+    }
+
+    if (setjmp(png_jmpbuf(png))) {
+        std::cerr << "Erreur d'écriture PNG.\n";
+        fclose(fp);
+        png_destroy_write_struct(&png, &info);
+        return;
+    }
+
+    png_init_io(png, fp);
+
+    // Définir les informations d'en-tête
+    png_set_IHDR(
+        png, info, width, height,
+        8, PNG_COLOR_TYPE_GRAY, PNG_INTERLACE_NONE,
+        PNG_COMPRESSION_TYPE_BASE, PNG_FILTER_TYPE_BASE
+    );
+
+    png_write_info(png, info);
+
+    // Préparer les lignes
+    std::vector<png_bytep> row_pointers(height);
+    for (int y = 0; y < height; ++y) {
+        row_pointers[y] = (png_bytep)&data[y * width];
+    }
+
+    png_write_image(png, row_pointers.data());
+    png_write_end(png, nullptr);
+
+    fclose(fp);
+    png_destroy_write_struct(&png, &info);
+
+    std::cout << "Image sauvegardée : " << file_name << std::endl;
+}
+#endif // UTILS_HPP
+
