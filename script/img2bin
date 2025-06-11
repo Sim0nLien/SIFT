@@ -1,0 +1,37 @@
+import numpy as np
+from PIL import Image
+import os
+import sys
+
+def img2bin(image_path, bin_path):
+    """
+    Convert an image to a binary file.
+    
+    Parameters:
+    - image_path: Path to the input image file.
+    - bin_path: Path where the binary file will be saved.
+    """
+    # Load the image
+    img = Image.open(image_path)
+    
+    # Convert the image to grayscale
+    img = img.convert('L')
+    
+    # Convert the image to a numpy array
+    img_array = np.array(img)
+    
+    # Flatten the array and convert to bytes
+    img_bytes = img_array.flatten().tobytes()
+    
+    # Write the bytes to a binary file
+    os.makedirs(os.path.dirname(bin_path), exist_ok=True)
+    with open(bin_path, 'wb') as bin_file:
+        bin_file.write(img_bytes)
+    
+    print(f"Image converted to binary and saved at {bin_path}")
+
+
+if __name__ == "__main__":
+    image_path = 'script/images/Lenna.png'  # Replace with your image path
+    bin_path = 'script/data/Lennas.bin'  # Replace with your desired binary file path
+    img2bin(image_path, bin_path)

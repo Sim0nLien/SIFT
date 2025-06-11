@@ -60,5 +60,31 @@ void write_png(const char* filename, int width, int height, const std::vector<un
 
     std::cout << "Image sauvegardée : " << file_name << std::endl;
 }
+
+
+std::vector<unsigned char> read_bin(const std::string& filename, int width, int height) {
+    std::vector<unsigned char> data(width * height);
+    std::ifstream file(filename, std::ios::binary);
+    if (!file) {
+        std::cerr << "Erreur d'ouverture du fichier binaire." << std::endl;
+        return {};
+    }
+    file.read(reinterpret_cast<char*>(data.data()), width * height);
+    return data;
+}
+
+
+
+void write_bin(const std::string& filename, const std::vector<unsigned char>& data) {
+    std::ofstream file(filename, std::ios::binary);
+    if (!file) {
+        std::cerr << "Erreur d'ouverture du fichier binaire en écriture." << std::endl;
+        return;
+    }
+    file.write(reinterpret_cast<const char*>(data.data()), data.size());
+}
+
+
+
 #endif // UTILS_HPP
 
