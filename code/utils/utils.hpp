@@ -62,28 +62,50 @@ void write_png(const char* filename, int width, int height, const std::vector<un
 }
 
 
-std::vector<unsigned char> read_bin(const std::string& filename, int width, int height) {
-    std::vector<unsigned char> data(width * height);
+std::vector<int> read_bin(const std::string& filename, int width, int height) {
+    std::vector<unsigned char> buffer(width * height);
     std::ifstream file(filename, std::ios::binary);
     if (!file) {
         std::cerr << "Erreur d'ouverture du fichier binaire." << std::endl;
         return {};
     }
-    file.read(reinterpret_cast<char*>(data.data()), width * height);
+    file.read(reinterpret_cast<char*>(buffer.data()), width * height);
+
+    std::vector<int> data(width * height);
+    for (size_t i = 0; i < buffer.size(); ++i) {
+        data[i] = static_cast<int>(buffer[i]);
+    }
     return data;
 }
 
 
 
-void write_bin(const std::string& filename, const std::vector<unsigned char>& data) {
+void write_bin(const std::string& filename, const std::vector<int>& data) {
     std::ofstream file(filename, std::ios::binary);
     if (!file) {
         std::cerr << "Erreur d'ouverture du fichier binaire en écriture." << std::endl;
         return;
     }
-    file.write(reinterpret_cast<const char*>(data.data()), data.size());
+    std::vector<unsigned char> buffer(data.size());
+    for (size_t i = 0; i < data.size(); ++i) {
+        buffer[i] = static_cast<unsigned char>(data[i]);
+    }
+    file.write(reinterpret_cast<const char*>(buffer.data()), buffer.size());
 }
 
+void write_bin_int(const std::string& filename, const std::vector<int>& data) {
+    std::ofstream file(filename, std::ios::binary);
+    if (!file) {
+        std::cerr << "Erreur d'ouverture du fichier binaire en écriture." << std::endl;
+        return;
+    }
+    for(int i = 0; i < data.size(); ++i) {
+        printf("data[%d] = %d\n", i, data[i]);
+    }
+    for (const int& value : data) {
+        file.write(reinterpret_cast<const char*>(&value), sizeof(int));
+    }
+}
 
 
 #endif // UTILS_HPP

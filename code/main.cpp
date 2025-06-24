@@ -6,6 +6,7 @@
 
 #include "src/src.hpp"
 #include "utils/utils.hpp"
+#include "src/interst_point.hpp"
 
 
 
@@ -14,23 +15,20 @@ int main() {
 
     printf("Début du programme\n");
 
-    const char* filename = "../script/data/Lennas.bin";
+    std::vector<int>result_coord;
 
-    std::vector<int> result;
-    
-    std::vector<uint8_t> matrices = read_bin(filename, 512, 512);
+    const char* filename = "../data/data/Lennas.bin";
 
-    for(int i = 0; i < 512 * 512; i++) {
-        printf("%d ", affichage[i]);
-        if ((i + 1) % 512 == 0) {
-            printf("\n");
-        }
+    result_coord = interest_point<int>(filename);
+
+    for(int i = 0; i < result_coord.size(); i += 2) {
+        printf("Coordonnée %d : (%d, %d)\n", i / 2, result_coord[i], result_coord[i + 1]);
     }
 
-    
+    write_bin_int("../coordinates.bin", result_coord);
 
-    // Assurez-vous que uint8 est défini, par exemple :
-    // ou utilisez uint8_t à la place de uint8
+    printf("Fin du programme\n");
+
     
 }
 
