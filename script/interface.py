@@ -18,6 +18,10 @@ def load_image(image_label, path_var):
         path_var.set(file_path)  # Met à jour la variable avec le chemin
     return image_label, file_path
 
+def run_find_interest(filename):
+    print(f"Trouver les points d'intérêt dans l'image : {filename}")
+    
+
 def create_interface():
     root = tk.Tk()
     root.title("Harry's Interface")
@@ -36,6 +40,8 @@ def create_interface():
 
     btn = tk.Button(root, text="Charger l'image", command=lambda: load_image(image_label, image_path_var))   
     btn.pack(pady=10)
+
+    btn_find_interest = tk.Button(root, text="Trouver les points d'intérêt", command=lambda: run_find_interest(filename = image_path_var.get()))
 
     btn_quit = tk.Button(root, text="Quitter", command=root.quit)
     btn_quit.pack(pady=10)

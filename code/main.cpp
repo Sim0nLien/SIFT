@@ -11,15 +11,15 @@
 
 
 
-int main() {
+int main(int argc, char* argv[]) {
 
     printf("Début du programme\n");
 
     std::vector<int>result_coord;
 
-    const char* filename = "../data/data/Lennas.bin";
+    char* input_file = argv[1]; 
 
-    result_coord = interest_point<int>(filename);
+    result_coord = interest_point<int>(input_file);
 
     for(int i = 0; i < result_coord.size(); i += 2) {
         printf("Coordonnée %d : (%d, %d)\n", i / 2, result_coord[i], result_coord[i + 1]);
