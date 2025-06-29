@@ -25,7 +25,7 @@ int main(int argc, char* argv[]) {
         printf("Coordonnée %d : (%d, %d)\n", i / 2, result_coord[i], result_coord[i + 1]);
     }
 
-    write_bin_int("../coordinates.bin", result_coord);
+    write_bin_int("../data/tmp/coordinates.bin", result_coord);
 
     printf("Fin du programme\n");
 

@@ -99,9 +99,9 @@ void write_bin_int(const std::string& filename, const std::vector<int>& data) {
         std::cerr << "Erreur d'ouverture du fichier binaire en écriture." << std::endl;
         return;
     }
-    for(int i = 0; i < data.size(); ++i) {
-        printf("data[%d] = %d\n", i, data[i]);
-    }
+    // for(int i = 0; i < data.size(); ++i) {
+    //     printf("data[%d] = %d\n", i, data[i]);
+    // }
     for (const int& value : data) {
         file.write(reinterpret_cast<const char*>(&value), sizeof(int));
     }
